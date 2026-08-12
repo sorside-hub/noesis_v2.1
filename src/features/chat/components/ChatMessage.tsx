@@ -286,18 +286,36 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
 
             {/* Right: Copy & Jadikan Note buttons in boxed icon style */}
             <div className="flex items-center gap-1.5 shrink-0">
+              {/* Sources Toggle Button */}
+              {resolvedSources.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setIsSourcesExpanded(!isSourcesExpanded)}
+                  title={isSourcesExpanded ? "Sembunyikan Sumber" : "Lihat Sumber"}
+                  aria-label="Lihat Sumber"
+                  className={`flex items-center gap-1 px-2 py-1 rounded-lg border transition-all cursor-pointer shadow-xs active:scale-95 ${
+                    isSourcesExpanded
+                      ? 'bg-[#2A2A2A] border-[#3D3D3D] text-[#FFFFFF]'
+                      : 'bg-[#1C1C1C] hover:bg-[#252525] border-[#2D2D2D] hover:border-[#3D3D3D] text-[#A3A3A3] hover:text-[#FFFFFF]'
+                  }`}
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span className="text-[10px] font-semibold">{resolvedSources.length} Sources</span>
+                </button>
+              )}
+
               {/* Copy Button */}
               <button
                 type="button"
                 onClick={handleCopy}
                 title={copied ? "Tersalin!" : "Salin jawaban"}
                 aria-label="Salin jawaban"
-                className="p-1.5 rounded-lg bg-[#1C1C1C] hover:bg-[#252525] border border-[#2D2D2D] hover:border-[#3D3D3D] text-[#B0B0B0] hover:text-[#FFFFFF] transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center"
+                className="p-1.5 rounded-lg bg-[#1C1C1C] hover:bg-[#252525] border border-[#2D2D2D] hover:border-[#3D3D3D] text-[#A3A3A3] hover:text-[#FFFFFF] transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center"
               >
                 {copied ? (
                   <Check className="w-3.5 h-3.5 text-neutral-300" />
                 ) : (
-                  <Copy className="w-3.5 h-3.5 text-[#A3A3A3]" />
+                  <Copy className="w-3.5 h-3.5 text-current" />
                 )}
               </button>
 
@@ -422,25 +440,10 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           )}
 
           {/* RAG Sources Section (Separate section below metadata bar) */}
-          {resolvedSources.length > 0 && (
+          {resolvedSources.length > 0 && isSourcesExpanded && (
             <div className="mt-3 pt-2.5 border-t border-[#262626]">
-              {/* Collapsed / Expanded Header Toggle */}
-              <button
-                type="button"
-                onClick={() => setIsSourcesExpanded(!isSourcesExpanded)}
-                className="flex items-center gap-1.5 text-xs font-semibold text-[#A3A3A3] hover:text-[#E5E5E5] transition-colors cursor-pointer py-1 select-none group/toggle"
-              >
-                <span>Sources</span>
-                {isSourcesExpanded ? (
-                  <ChevronDown className="w-3.5 h-3.5 text-[#A3A3A3] group-hover/toggle:text-[#E5E5E5]" />
-                ) : (
-                  <ChevronRight className="w-3.5 h-3.5 text-[#A3A3A3] group-hover/toggle:text-[#E5E5E5]" />
-                )}
-              </button>
-
               {/* Expanded Sources List */}
-              {isSourcesExpanded && (
-                <div className="mt-2.5 space-y-2">
+              <div className="space-y-2">
                   {resolvedSources.map((src) => {
                     const scorePct = Math.round(src.score > 1 ? src.score : src.score * 100);
                     return (
@@ -470,7 +473,6 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                     );
                   })}
                 </div>
-              )}
             </div>
           )}
         </div>
