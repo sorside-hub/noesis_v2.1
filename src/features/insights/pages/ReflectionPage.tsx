@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
-import { Compass, Eye, HelpCircle, Lightbulb, Sparkles, Loader2, RefreshCw, AlertCircle, Trash2, ChevronDown, ChevronUp, FileText, Brain, Layers, ArrowRightLeft, ExternalLink } from 'lucide-react';
+import { Compass, Eye, HelpCircle, Lightbulb, Sparkles, Loader2, RefreshCw, AlertCircle, Trash2, ChevronDown, ChevronUp, FileText, Brain, Layers, ArrowRightLeft, ExternalLink, Activity } from 'lucide-react';
 import { VaultHeader } from '../../vault/components/VaultHeader';
 import { getNotes } from '../../vault/services/noteService';
 import { NoteItem } from '../../vault/pages/VaultPage';
@@ -277,41 +277,87 @@ export const ReflectionPage: React.FC<ReflectionPageProps> = ({ onBack }) => {
         onScroll={handleScroll}
         className="flex-1 overflow-y-auto px-4 py-5 flex flex-col max-w-lg mx-auto w-full pb-24 space-y-5"
       >
-        {/* Module Banner Header */}
-        <div className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-2xl p-4 sm:p-5 flex items-center justify-between shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#242424] border border-[#303030] flex items-center justify-center text-[#E5E5E5] shadow-xs">
-              <Compass className="w-5.5 h-5.5 stroke-[1.75] text-[#E5E5E5]" />
-            </div>
-            <div>
-              <h1 className="text-base sm:text-lg font-bold text-[#E5E5E5] tracking-tight">
-                Reflection Core
-              </h1>
-              <p className="text-xs text-[#A3A3A3] mt-0.5 leading-relaxed">
-                Ruang refleksi kognitif untuk menghubungkan ide & pemikiran.
-              </p>
-            </div>
-          </div>
-
-          {reflections.length > 0 && (
-            <button
-              onClick={handleGenerateReflections}
-              disabled={generating}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#242424] hover:bg-[#2C2C2C] text-xs font-semibold text-[#E5E5E5] border border-[#333333] transition-all cursor-pointer disabled:opacity-50 active:scale-95 shadow-xs"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 text-[#A3A3A3] ${generating ? 'animate-spin' : ''}`} />
-              <span>{generating ? 'Menganalisis...' : 'Analisis Baru'}</span>
-            </button>
-          )}
+        {/* Header: Icon + Title + Line */}
+        <div className="flex items-center gap-2.5 pb-3 border-b border-[#2A2A2A]">
+          <Compass className="w-5 h-5 text-[#E5E5E5]" />
+          <h1 className="text-xl font-bold text-[#E5E5E5] tracking-tight">
+            Reflection Core
+          </h1>
         </div>
 
-        {/* Error Alert */}
-        {error && (
-          <div className="p-3.5 rounded-xl bg-[#181818] border border-[#282828] text-[#A3A3A3] text-xs flex items-start gap-2.5 shadow-sm">
-            <AlertCircle className="w-4 h-4 shrink-0 text-[#E5E5E5] mt-0.5" />
-            <span className="leading-relaxed">{error}</span>
+        {/* SECTION 1: Intro UI */}
+        <div className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+          <div>
+            <h2 className="text-sm font-semibold text-[#E5E5E5] flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#E5E5E5]" />
+              <span>Analisis Refleksi Kognitif</span>
+            </h2>
+            <p className="text-xs text-[#A3A3A3] mt-1 leading-relaxed">
+              Ruang refleksi kognitif untuk menghubungkan ide & pemikiran, menyajikan sudut pandang baru.
+            </p>
           </div>
-        )}
+
+          {/* Metadata info */}
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            <div className="p-2.5 rounded-xl bg-[#181818] border border-[#282828] flex items-center gap-2 text-xs">
+              <FileText className="w-3.5 h-3.5 text-[#8E8E93] shrink-0" />
+              <div className="min-w-0">
+                <p className="text-[10px] text-[#8E8E93]">Catatan Dianalisis</p>
+                <p className="font-semibold text-[#E5E5E5] truncate">
+                  {loading ? '...' : `${notes.length} Notes`}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-[#181818] border border-[#282828] flex items-center gap-2 text-xs">
+              <Activity className="w-3.5 h-3.5 text-[#8E8E93] shrink-0" />
+              <div className="min-w-0">
+                <p className="text-[10px] text-[#8E8E93]">Status Engine</p>
+                <p className="font-semibold text-[#CCCCCC] text-[11px] truncate">
+                  {reflections.length > 0 ? 'Aktif' : 'Menunggu Analisis'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Error State Inline */}
+          {error && (
+            <div className="p-3 rounded-xl bg-[#181818] border border-[#282828] text-xs text-[#A3A3A3] space-y-1.5">
+              <div className="flex items-center gap-2 font-medium text-[#E5E5E5]">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0 text-[#E5E5E5]" />
+                <span>Gagal Melakukan Analisis</span>
+              </div>
+              <p className="text-[10px] text-[#A3A3A3] leading-relaxed">{error}</p>
+            </div>
+          )}
+
+          {/* Action Button */}
+          <div className="pt-1">
+            <button
+              type="button"
+              onClick={handleGenerateReflections}
+              disabled={generating || loading || notes.length < 2}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#E5E5E5] hover:bg-white active:scale-[0.98] text-[#111111] text-xs font-semibold shadow-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {generating ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-[#111111]" />
+                  <span>Menganalisis Hubungan Pengetahuan...</span>
+                </>
+              ) : (
+                <>
+                  {reflections.length > 0 ? <RefreshCw className="w-4 h-4 text-[#111111]" /> : <Sparkles className="w-4 h-4 text-[#111111]" />}
+                  <span>{reflections.length > 0 ? 'Analisis Refleksi Baru' : 'Jalankan Reflection Engine'}</span>
+                </>
+              )}
+            </button>
+            {notes.length < 2 && (
+              <p className="text-[11px] text-[#8E8E93] text-center mt-3">
+                Membutuhkan minimal 2 catatan di Vault. Saat ini terdapat {notes.length} catatan.
+              </p>
+            )}
+          </div>
+        </div>
 
         {/* Main Body */}
         {loading ? (
@@ -322,36 +368,11 @@ export const ReflectionPage: React.FC<ReflectionPageProps> = ({ onBack }) => {
           </div>
         ) : reflections.length === 0 ? (
           /* Empty State */
-          <div className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-2xl p-7 text-center space-y-4 shadow-sm">
-            <div className="w-14 h-14 rounded-2xl bg-[#242424] border border-[#303030] flex items-center justify-center text-[#E5E5E5] mx-auto shadow-xs">
-              <Sparkles className="w-7 h-7 text-[#E5E5E5]" />
+          <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center">
+            <div className="w-12 h-12 rounded-2xl bg-[#1C1C1C] border border-[#2A2A2A] flex items-center justify-center mb-3 text-[#E5E5E5]">
+              <Compass className="w-6 h-6 text-[#A3A3A3]" />
             </div>
-            <div className="space-y-1.5 max-w-xs mx-auto">
-              <h2 className="text-sm font-bold text-[#E5E5E5]">
-                Belum Ada Refleksi Terbentuk
-              </h2>
-              <p className="text-xs text-[#A3A3A3] leading-relaxed">
-                Reflection Engine akan menganalisis benang merah antar-pengetahuan secara semantik untuk menyajikan sudut pandang baru.
-              </p>
-            </div>
-
-            <button
-              onClick={handleGenerateReflections}
-              disabled={generating}
-              className="flex items-center justify-center gap-2 w-full max-w-xs mx-auto py-2.5 px-4 rounded-xl bg-[#E5E5E5] hover:bg-white text-[#111111] font-bold text-xs transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
-            >
-              {generating ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin text-[#111111]" />
-                  <span>Menganalisis Hubungan Pengetahuan...</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4 text-[#111111]" />
-                  <span>Jalankan Reflection Engine</span>
-                </>
-              )}
-            </button>
+            <p className="text-xs text-[#A3A3A3]">Belum ada Refleksi yang terbentuk.</p>
           </div>
         ) : (
           /* Reflections list in accordion layout */

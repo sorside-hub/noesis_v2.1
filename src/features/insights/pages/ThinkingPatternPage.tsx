@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
-import { Brain, Sparkles, Clock, FileText, Loader2, RefreshCw, AlertCircle, CheckCircle2, Layers, ArrowLeft } from 'lucide-react';
+import { Brain, Sparkles, Activity, FileText, Loader2, RefreshCw, AlertCircle, CheckCircle2, Layers, ArrowLeft } from 'lucide-react';
 import { getNotes } from '../../vault/services/noteService';
 import { ThinkingPattern } from '../types/thinkingPattern';
 import { getSavedThinkingPatterns, generateThinkingPatterns } from '../services/thinkingPatternService';
@@ -217,11 +217,11 @@ export const ThinkingPatternPage: React.FC<ThinkingPatternPageProps> = ({ onBack
           </div>
 
           <div className="p-2.5 rounded-xl bg-[#181818] border border-[#282828] flex items-center gap-2 text-xs">
-            <Clock className="w-3.5 h-3.5 text-[#8E8E93] shrink-0" />
+            <Activity className="w-3.5 h-3.5 text-[#8E8E93] shrink-0" />
             <div className="min-w-0">
-              <p className="text-[10px] text-[#8E8E93]">Analisis Terakhir</p>
+              <p className="text-[10px] text-[#8E8E93]">Status Engine</p>
               <p className="font-semibold text-[#CCCCCC] text-[11px] truncate">
-                {formatLastAnalyzed(lastAnalyzedAt)}
+                {patterns.length > 0 ? 'Aktif' : 'Menunggu Analisis'}
               </p>
             </div>
           </div>
@@ -243,7 +243,7 @@ export const ThinkingPatternPage: React.FC<ThinkingPatternPageProps> = ({ onBack
           <button
             type="button"
             onClick={handleAnalyze}
-            disabled={analyzing || loading}
+            disabled={analyzing || loading || noteCount < 2}
             className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#E5E5E5] hover:bg-white active:scale-[0.98] text-[#111111] text-xs font-semibold shadow-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {analyzing ? (
@@ -253,42 +253,31 @@ export const ThinkingPatternPage: React.FC<ThinkingPatternPageProps> = ({ onBack
               </>
             ) : (
               <>
-                <Brain className="w-4 h-4 text-[#111111]" />
-                <span>Analyze Pattern</span>
+                {patterns.length > 0 ? <RefreshCw className="w-4 h-4 text-[#111111]" /> : <Sparkles className="w-4 h-4 text-[#111111]" />}
+                <span>{patterns.length > 0 ? 'Analisis Pola Baru' : 'Analyze Pattern'}</span>
               </>
             )}
           </button>
+          {noteCount < 2 && (
+            <p className="text-[11px] text-[#8E8E93] text-center mt-3">
+              Membutuhkan minimal 2 catatan di Vault. Saat ini terdapat {noteCount} catatan.
+            </p>
+          )}
         </div>
       </div>
 
       {/* SECTION 2: Active Pattern List or Empty/Loading State */}
       {analyzing && patterns.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center text-center py-12 space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-[#242424] border border-[#303030] flex items-center justify-center text-[#E5E5E5]">
-            <Loader2 className="w-6 h-6 animate-spin text-[#E5E5E5]" />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-[#E5E5E5]">
-              Menganalisis {noteCount} Catatan Vault...
-            </p>
-            <p className="text-xs text-[#A3A3A3] mt-1 max-w-xs mx-auto">
-              Noesis AI sedang mengekstrak kerangka kognitif dan koneksi ide.
-            </p>
-          </div>
+        <div className="flex-1 flex flex-col items-center justify-center py-20 text-center">
+          <Loader2 className="w-7 h-7 animate-spin text-[#E5E5E5] mb-3" />
+          <p className="text-xs text-[#A3A3A3]">Menganalisis Pola Pemikiran...</p>
         </div>
       ) : patterns.length === 0 && !error ? (
-        <div className="flex-1 flex flex-col items-center justify-center text-center py-12 space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-[#242424] border border-[#303030] flex items-center justify-center text-[#A3A3A3]">
-            <Brain className="w-6 h-6" />
+        <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center">
+          <div className="w-12 h-12 rounded-2xl bg-[#1C1C1C] border border-[#2A2A2A] flex items-center justify-center mb-3 text-[#E5E5E5]">
+            <Brain className="w-6 h-6 text-[#A3A3A3]" />
           </div>
-          <div>
-            <p className="text-sm font-semibold text-[#E5E5E5]">
-              Belum ada pola ditemukan.
-            </p>
-            <p className="text-xs text-[#A3A3A3] mt-1 max-w-xs mx-auto">
-              Klik tombol "Analyze Pattern" di atas untuk memulai analisis otomatis.
-            </p>
-          </div>
+          <p className="text-xs text-[#A3A3A3]">Belum ada pola ditemukan.</p>
         </div>
       ) : patterns.length > 0 ? (
         <div className="space-y-3 pt-2 animate-fadeIn">

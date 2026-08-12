@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
-import { Layers, Sparkles, Loader2, RefreshCw, AlertCircle } from 'lucide-react';
+import { Layers, Sparkles, Loader2, RefreshCw, AlertCircle, FileText, Activity } from 'lucide-react';
 import { VaultHeader } from '../../vault/components/VaultHeader';
 import { getNotes } from '../../vault/services/noteService';
 import { NoteItem } from '../../vault/pages/VaultPage';
@@ -143,38 +143,86 @@ export const ThemesPage: React.FC<ThemesPageProps> = ({ onBack, onSelectTheme })
         className="flex-1 overflow-y-auto px-4 py-5 flex flex-col max-w-lg mx-auto w-full pb-24"
       >
         {/* Header: Icon + Title + Line */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#2A2A2A]">
-          <div className="flex items-center gap-2.5">
-            <Layers className="w-5 h-5 text-[#E5E5E5]" />
-            <h1 className="text-xl font-bold text-[#E5E5E5] tracking-tight">
-              Themes Overview
-            </h1>
-          </div>
-
-          {themes.length > 0 && (
-            <button
-              onClick={handleGenerateThemes}
-              disabled={analyzing || notes.length < 2}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#242424] hover:bg-[#2C2C2C] text-xs font-medium text-[#E5E5E5] border border-[#333333] transition-all cursor-pointer disabled:opacity-50"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 text-[#A3A3A3] ${analyzing ? 'animate-spin' : ''}`} />
-              <span>{analyzing ? 'Menganalisis...' : 'Analisis Ulang'}</span>
-            </button>
-          )}
+        <div className="flex items-center gap-2.5 pb-3 border-b border-[#2A2A2A]">
+          <Layers className="w-5 h-5 text-[#E5E5E5]" />
+          <h1 className="text-xl font-bold text-[#E5E5E5] tracking-tight">
+            Themes Overview
+          </h1>
         </div>
 
-        {/* Subtitle / Description */}
-        <p className="text-xs text-[#A3A3A3] mt-2 mb-4 leading-relaxed">
-          Daftar topik utama yang berkembang secara alami dari klaster semantik catatan di Vault Anda.
-        </p>
-
-        {/* Error Alert */}
-        {error && (
-          <div className="mb-4 p-3 rounded-xl bg-[#181818] border border-[#282828] text-[#A3A3A3] text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 text-[#E5E5E5]" />
-            <span>{error}</span>
+        {/* SECTION 1: Intro UI */}
+        <div className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+          <div>
+            <h2 className="text-sm font-semibold text-[#E5E5E5] flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#E5E5E5]" />
+              <span>Ekstraksi Topik Utama</span>
+            </h2>
+            <p className="text-xs text-[#A3A3A3] mt-1 leading-relaxed">
+              Daftar topik utama yang berkembang secara alami dari klaster semantik catatan di Vault Anda.
+            </p>
           </div>
-        )}
+
+          {/* Metadata info */}
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            <div className="p-2.5 rounded-xl bg-[#181818] border border-[#282828] flex items-center gap-2 text-xs">
+              <FileText className="w-3.5 h-3.5 text-[#8E8E93] shrink-0" />
+              <div className="min-w-0">
+                <p className="text-[10px] text-[#8E8E93]">Catatan Dianalisis</p>
+                <p className="font-semibold text-[#E5E5E5] truncate">
+                  {loading ? '...' : `${notes.length} Notes`}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-[#181818] border border-[#282828] flex items-center gap-2 text-xs">
+              <Activity className="w-3.5 h-3.5 text-[#8E8E93] shrink-0" />
+              <div className="min-w-0">
+                <p className="text-[10px] text-[#8E8E93]">Status Engine</p>
+                <p className="font-semibold text-[#CCCCCC] text-[11px] truncate">
+                  {themes.length > 0 ? 'Aktif' : 'Menunggu Analisis'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Error State Inline */}
+          {error && (
+            <div className="p-3 rounded-xl bg-[#181818] border border-[#282828] text-xs text-[#A3A3A3] space-y-1.5">
+              <div className="flex items-center gap-2 font-medium text-[#E5E5E5]">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0 text-[#E5E5E5]" />
+                <span>Gagal Melakukan Analisis</span>
+              </div>
+              <p className="text-[10px] text-[#A3A3A3] leading-relaxed">{error}</p>
+            </div>
+          )}
+
+          {/* Action Button: Analyze Pattern */}
+          <div className="pt-1">
+            <button
+              type="button"
+              onClick={handleGenerateThemes}
+              disabled={analyzing || loading || notes.length < 2}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#E5E5E5] hover:bg-white active:scale-[0.98] text-[#111111] text-xs font-semibold shadow-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {analyzing ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-[#111111]" />
+                  <span>Menganalisis Klaster Semantik...</span>
+                </>
+              ) : (
+                <>
+                  {themes.length > 0 ? <RefreshCw className="w-4 h-4 text-[#111111]" /> : <Sparkles className="w-4 h-4 text-[#111111]" />}
+                  <span>{themes.length > 0 ? 'Analisis Ulang Themes' : 'Jalankan Generator Themes'}</span>
+                </>
+              )}
+            </button>
+            {notes.length < 2 && (
+              <p className="text-[11px] text-[#8E8E93] text-center mt-3">
+                Membutuhkan minimal 2 catatan di Vault. Saat ini terdapat {notes.length} catatan.
+              </p>
+            )}
+          </div>
+        </div>
 
         {/* Loading State */}
         {loading ? (
@@ -185,40 +233,11 @@ export const ThemesPage: React.FC<ThemesPageProps> = ({ onBack, onSelectTheme })
           </div>
         ) : themes.length === 0 ? (
           /* Empty State */
-          <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center bg-[#1C1C1C] rounded-2xl border border-[#2A2A2A] mt-2 shadow-sm">
-            <div className="w-12 h-12 rounded-2xl bg-[#242424] border border-[#303030] flex items-center justify-center mb-4 text-[#E5E5E5]">
-              <Sparkles className="w-6 h-6 text-[#E5E5E5]" />
+          <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center">
+            <div className="w-12 h-12 rounded-2xl bg-[#1C1C1C] border border-[#2A2A2A] flex items-center justify-center mb-3 text-[#E5E5E5]">
+              <Layers className="w-6 h-6 text-[#A3A3A3]" />
             </div>
-            <h2 className="text-base font-semibold text-[#E5E5E5] mb-1">
-              Belum Ada Themes Terbentuk
-            </h2>
-            <p className="text-xs text-[#A3A3A3] max-w-xs mb-6 leading-relaxed">
-              Themes Engine akan menganalisis hubungan semantik antar-catatan Anda secara organik untuk mengekstrak topik-topik utama.
-            </p>
-
-            <button
-              onClick={handleGenerateThemes}
-              disabled={analyzing || notes.length < 2}
-              className="flex items-center justify-center gap-2 w-full max-w-xs py-2.5 px-4 rounded-xl bg-[#E5E5E5] hover:bg-white text-[#111111] font-semibold text-xs shadow-md transition-all cursor-pointer active:scale-95 disabled:opacity-50"
-            >
-              {analyzing ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin text-[#111111]" />
-                  <span>Menganalisis Klaster Semantik...</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4 text-[#111111]" />
-                  <span>Jalankan Generator Themes</span>
-                </>
-              )}
-            </button>
-
-            {notes.length < 2 && (
-              <p className="text-[11px] text-[#8E8E93] mt-3">
-                Membutuhkan minimal 2 catatan di Vault. Saat ini terdapat {notes.length} catatan.
-              </p>
-            )}
+            <p className="text-xs text-[#A3A3A3]">Belum ada Themes yang terbentuk.</p>
           </div>
         ) : (
           /* Theme Card List */
