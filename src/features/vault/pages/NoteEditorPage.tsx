@@ -330,7 +330,7 @@ export const NoteEditorPage: React.FC<NoteEditorPageProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#131313] select-none relative animate-fadeIn pb-14 overflow-hidden">
+    <div className="flex-1 flex flex-col h-full bg-[#131313] select-none relative animate-fadeIn overflow-hidden">
       {/* Self-contained Header */}
       <VaultHeader onBack={onCancel} onOpenProperties={onOpenProperties} />
 
