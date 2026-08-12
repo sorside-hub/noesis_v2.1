@@ -598,11 +598,11 @@ export const VaultSettingsDrawer: React.FC<VaultSettingsDrawerProps> = ({
               <span
                 className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border ${
                   connectionStatus === 'Connected'
-                    ? 'text-neutral-300 bg-neutral-500/10 border-neutral-500/20'
+                    ? 'text-[#34D399] bg-[#10B981]/15 border-[#10B981]/30'
                     : connectionStatus === 'Syncing'
-                    ? 'text-neutral-400 bg-neutral-800/10 border-neutral-500/20 animate-pulse'
-                    : connectionStatus === 'Error'
-                    ? 'text-neutral-300 bg-neutral-500/10 border-neutral-500/20'
+                    ? 'text-[#FBBF24] bg-[#F59E0B]/15 border-[#F59E0B]/30 animate-pulse'
+                    : connectionStatus === 'Error' || connectionStatus === 'Offline'
+                    ? 'text-[#F87171] bg-[#EF4444]/15 border-[#EF4444]/30'
                     : 'text-[#A3A3A3] bg-[#2A2A2A] border-[#3F3F3F]'
                 }`}
               >
