@@ -640,21 +640,6 @@ export const ChatSettingsDrawer: React.FC<ChatSettingsDrawerProps> = ({
         )}
       </div>
     </div>
-
-    {/* Bottom Action Footer with Auto-Save Indicator and Close Button */}
-    <div className="p-4 border-t border-[#303030] bg-[#1C1C1C] shrink-0 flex items-center justify-between gap-3">
-      <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-medium">
-        <Check className="w-3.5 h-3.5" />
-        <span>Tersimpan otomatis</span>
-      </div>
-      <button
-        type="button"
-        onClick={onClose}
-        className="py-2 px-4 rounded-xl bg-[#2A2A2A] hover:bg-[#333333] text-white font-medium text-xs border border-[#3A3A3A] transition-colors cursor-pointer"
-      >
-        Tutup
-      </button>
-    </div>
   </div>
 </div>
 );
