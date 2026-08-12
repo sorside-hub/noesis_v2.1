@@ -413,9 +413,6 @@ export const NotePropertyDrawer: React.FC<NotePropertyDrawerProps> = ({
                 <span className="text-[11px] font-semibold text-[#8E8E93] uppercase tracking-wider group-hover:text-[#E5E5E5] transition-colors">
                   Otomatisasi AI
                 </span>
-                <span className="text-[9px] font-medium text-[#A3A3A3] bg-[#2A2A2A] px-1.5 py-0.5 rounded border border-[#333333]">
-                  Groq AI
-                </span>
               </div>
               <div className="text-[#737373] group-hover:text-[#E5E5E5] transition-colors">
                 {expandedSections.aiTools ? (
