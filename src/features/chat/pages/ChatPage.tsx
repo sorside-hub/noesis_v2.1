@@ -214,22 +214,22 @@ export const ChatPage: React.FC<ChatPageProps> = ({
               ? `Fallback aktif: Menggunakan ${activeModel} (Primary: ${primaryModel})`
               : `Model Aktif: ${activeModel}`
           }
-          className={`pointer-events-auto flex items-center gap-1 px-2 py-0.5 rounded-full border backdrop-blur-md shadow-md transition-all cursor-pointer active:scale-95 ${
+          className={`pointer-events-auto flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border backdrop-blur-md shadow-md transition-all cursor-pointer active:scale-95 ${
             isFallback
-              ? 'bg-neutral-800 border-neutral-600 text-neutral-300 hover:bg-neutral-700'
-              : 'bg-[#1C1C1C]/80 border-[#2A2A2A] text-[#B0B0B0] hover:text-[#FFFFFF] hover:bg-[#252525]/90 hover:border-[#3A3A3A]'
+              ? 'bg-neutral-900/60 border-neutral-600/40 text-neutral-400 hover:bg-neutral-800/80'
+              : 'bg-neutral-800 border-neutral-600 text-neutral-200 hover:bg-neutral-700'
           }`}
         >
           <span
             className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-              isFallback ? 'bg-neutral-400 animate-pulse' : 'bg-neutral-400'
+              isFallback ? 'bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.8)] animate-pulse' : 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]'
             }`}
           />
-          <span className="text-[10px] font-mono tracking-tight truncate max-w-[110px] sm:max-w-none">
+          <span className="text-[10px] font-mono font-semibold tracking-wider truncate max-w-[110px] sm:max-w-none">
             {activeModel}
           </span>
           {isFallback && (
-            <span className="text-[8px] px-1 py-0 bg-neutral-800 text-neutral-300 rounded font-semibold shrink-0">
+            <span className="text-[8px] px-1 py-0 bg-amber-900/30 text-amber-500 rounded font-semibold shrink-0 border border-amber-900/50">
               Fallback
             </span>
           )}
