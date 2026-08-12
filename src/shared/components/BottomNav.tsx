@@ -56,7 +56,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   return (
     <div
       ref={navRef}
-      className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 select-none flex items-center transition-transform duration-300 ease-out ${
+      className={`fixed right-0 top-[70%] -translate-y-1/2 z-50 select-none flex items-center transition-transform duration-300 ease-out ${
         isOpen ? 'translate-x-0' : 'translate-x-[44px]'
       }`}
     >
