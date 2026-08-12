@@ -64,7 +64,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
       <button
         onClick={() => setIsOpen(!isOpen)}
         title={isOpen ? 'Tutup Navigasi' : 'Buka Navigasi'}
-        className="flex items-center justify-center w-8 py-6 z-10 text-white/60 hover:text-white cursor-pointer transition-colors duration-150 shrink-0 active:scale-95 touch-manipulation"
+        className="flex items-center justify-center w-8 py-3 z-10 text-white/60 hover:text-white cursor-pointer transition-colors duration-150 shrink-0 active:scale-95 touch-manipulation"
       >
         {isOpen ? (
           <ChevronRight className="w-5 h-5 text-white/90" />
