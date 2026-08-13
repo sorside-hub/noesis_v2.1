@@ -18,7 +18,7 @@ export async function handleClassify(req: Request, env?: Record<string, any>): P
       });
     }
 
-    const apiKeys = getGeminiApiKeys(env);
+    const apiKeys = getGeminiApiKeys(env, req);
 
     // Prepare Pair 2 structure:
     const pair2 = { primary: apiKeys.pair2.primary, backup: apiKeys.pair2.backup };
@@ -130,13 +130,30 @@ Output WAJIB berupa JSON valid saja tanpa teks tambahan:
     }
 
     let jsonResult: any = {};
+    let cleanedText = rawJsonResponse.trim();
+    if (cleanedText.startsWith('```')) {
+      cleanedText = cleanedText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+    }
+
     try {
-      jsonResult = JSON.parse(rawJsonResponse);
+      jsonResult = JSON.parse(cleanedText);
     } catch {
-      return new Response(
-        JSON.stringify({ error: 'Gagal memproses format JSON dari AI.' }),
-        { status: 500, headers: { 'Content-Type': 'application/json' } }
-      );
+      const match = cleanedText.match(/\{[\s\S]*\}/);
+      if (match) {
+        try {
+          jsonResult = JSON.parse(match[0]);
+        } catch {
+          return new Response(
+            JSON.stringify({ error: 'Gagal memproses format JSON dari AI.' }),
+            { status: 500, headers: { 'Content-Type': 'application/json' } }
+          );
+        }
+      } else {
+        return new Response(
+          JSON.stringify({ error: 'Gagal memproses format JSON dari AI.' }),
+          { status: 500, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
     }
 
     let category = jsonResult.category || null;

@@ -19,7 +19,7 @@ export async function handleThinkingPattern(req: Request, env?: Record<string, a
       );
     }
 
-    const apiKeys = getGeminiApiKeys(env);
+    const apiKeys = getGeminiApiKeys(env, req);
     const pair2 = { primary: apiKeys.pair2.primary, backup: apiKeys.pair2.backup };
 
     const notesSummaryText = rawNotes

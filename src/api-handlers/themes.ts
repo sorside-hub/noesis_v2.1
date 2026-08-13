@@ -18,7 +18,7 @@ export async function handleThemes(req: Request, env?: Record<string, any>): Pro
       );
     }
 
-    const apiKeys = getGeminiApiKeys(env);
+    const apiKeys = getGeminiApiKeys(env, req);
     const pair2 = { primary: apiKeys.pair2.primary, backup: apiKeys.pair2.backup };
 
     const notesMap = new Map<string, any>(rawNotes.map((n: any) => [n.id, n]));

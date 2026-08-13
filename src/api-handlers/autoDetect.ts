@@ -16,7 +16,7 @@ export async function handleAutoDetect(req: Request, env?: Record<string, any>):
       );
     }
 
-    const apiKeys = getGeminiApiKeys(env);
+    const apiKeys = getGeminiApiKeys(env, req);
     const pair2 = { primary: apiKeys.pair2.primary, backup: apiKeys.pair2.backup };
 
     const systemPrompt = `Kamu adalah AI Auto-Detect Metadata & Pustakawan Digital Tingkat Lanjut untuk Noesis Vault.
@@ -116,22 +116,37 @@ FORMAT OUTPUT HARUS JSON VALID SAJA:
     }
 
     let jsonResult: any = {};
+    let cleanedText = rawJsonResponse.trim();
+    if (cleanedText.startsWith('```')) {
+      cleanedText = cleanedText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+    }
+
     try {
-      jsonResult = JSON.parse(rawJsonResponse);
+      jsonResult = JSON.parse(cleanedText);
     } catch {
-      const firstLine = content.trim().split('\n')[0].replace(/^[#*-\s]+/, '').trim();
-      const fallbackTitle = firstLine ? firstLine.split(/\s+/).slice(0, 7).join(' ') : 'Catatan Baru';
-      return new Response(
-        JSON.stringify({
-          title: fallbackTitle,
-          category: 'self',
-          type: 'unknown',
-          tags: [],
-          summary: '',
-          confidence: 0,
-        }),
-        { status: 200, headers: { 'Content-Type': 'application/json' } }
-      );
+      const match = cleanedText.match(/\{[\s\S]*\}/);
+      let parsed = false;
+      if (match) {
+        try {
+          jsonResult = JSON.parse(match[0]);
+          parsed = true;
+        } catch {}
+      }
+      if (!parsed) {
+        const firstLine = content.trim().split('\n')[0].replace(/^[#*-\s]+/, '').trim();
+        const fallbackTitle = firstLine ? firstLine.split(/\s+/).slice(0, 7).join(' ') : 'Catatan Baru';
+        return new Response(
+          JSON.stringify({
+            title: fallbackTitle,
+            category: 'self',
+            type: 'unknown',
+            tags: [],
+            summary: '',
+            confidence: 0,
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
     }
 
     let detectedCategory = String(jsonResult.category || '').toLowerCase().trim();

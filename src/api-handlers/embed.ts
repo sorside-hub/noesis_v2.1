@@ -57,7 +57,7 @@ export async function handleEmbed(req: Request, env?: Record<string, any>): Prom
 
     const { text, texts } = body;
 
-    const keysObj = getGeminiApiKeys(env);
+    const keysObj = getGeminiApiKeys(env, req);
     const apiKeys = [
       keysObj.pair1.primary,
       keysObj.pair1.backup,

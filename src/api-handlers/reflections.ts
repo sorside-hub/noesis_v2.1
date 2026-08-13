@@ -6,7 +6,7 @@ export async function handleReflections(req: Request, env?: Record<string, any>)
     const body = (await req.json().catch(() => ({}))) as any;
     const { themes = [], thinkingPatterns = [], connections = [], notes = [] } = body;
 
-    const apiKeys = getGeminiApiKeys(env);
+    const apiKeys = getGeminiApiKeys(env, req);
     const pair2 = { primary: apiKeys.pair2.primary, backup: apiKeys.pair2.backup };
 
     // Construct high-quality context text about themes, thinking patterns, connections, and notes

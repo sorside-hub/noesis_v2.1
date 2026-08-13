@@ -17,7 +17,7 @@ export async function handleConnections(req: Request, env?: Record<string, any>)
       );
     }
 
-    const apiKeys = getGeminiApiKeys(env);
+    const apiKeys = getGeminiApiKeys(env, req);
     const pair2 = { primary: apiKeys.pair2.primary, backup: apiKeys.pair2.backup };
 
     let userPrompt = `Berikut adalah data pasangan kandidat entitas (catatan/tema) yang memiliki kemiripan semantik tinggi:\n\n`;

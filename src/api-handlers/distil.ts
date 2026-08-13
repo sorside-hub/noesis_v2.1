@@ -16,7 +16,7 @@ export async function handleDistil(req: Request, env?: Record<string, any>): Pro
       });
     }
 
-    const apiKeys = getGeminiApiKeys(env);
+    const apiKeys = getGeminiApiKeys(env, req);
     const pair2 = { primary: apiKeys.pair2.primary, backup: apiKeys.pair2.backup };
 
     const systemPrompt = `Kamu adalah Noesis Distiller, engine penyaring wawasan cerdas.

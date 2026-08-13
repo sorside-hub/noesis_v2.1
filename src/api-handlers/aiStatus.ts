@@ -1,7 +1,7 @@
 import { getGeminiApiKeys } from './geminiHelper';
 
 export async function handleAiStatus(req: Request, env?: Record<string, any>): Promise<Response> {
-  const geminiKeys = getGeminiApiKeys(env);
+  const geminiKeys = getGeminiApiKeys(env, req);
 
   const check = (key: string | null) => Boolean(key && key.trim().length > 0);
 

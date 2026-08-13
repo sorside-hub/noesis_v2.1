@@ -12,7 +12,7 @@ export async function handleChat(req: Request, env?: Record<string, any>): Promi
       });
     }
 
-    const apiKeys = getGeminiApiKeys(env);
+    const apiKeys = getGeminiApiKeys(env, req);
 
     // Prepare API structure for Pair 1
     const pair1 = { primary: apiKeys.pair1.primary, backup: apiKeys.pair1.backup };
