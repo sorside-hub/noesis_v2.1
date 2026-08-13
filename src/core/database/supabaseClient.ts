@@ -11,26 +11,50 @@ const getEnvVar = (key: string): string => {
   return '';
 };
 
-const supabaseUrl = getEnvVar('VITE_SUPABASE_URL');
-const supabaseAnonKey = getEnvVar('VITE_SUPABASE_ANON_KEY');
+const getActiveSupabaseConfig = (): { url: string; key: string } => {
+  let url = '';
+  let key = '';
+  
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      url = localStorage.getItem('noesis_supabase_url') || '';
+      key = localStorage.getItem('noesis_supabase_anon_key') || '';
+    }
+  } catch (e) {
+    console.error('Error reading localStorage for Supabase keys:', e);
+  }
+
+  if (!url) {
+    url = getEnvVar('VITE_SUPABASE_URL');
+  }
+  if (!key) {
+    key = getEnvVar('VITE_SUPABASE_ANON_KEY');
+  }
+
+  return { url: url.trim(), key: key.trim() };
+};
 
 let supabaseInstance: SupabaseClient | null = null;
+let cachedUrl = '';
+let cachedKey = '';
 
 export const isSupabaseConfigured = (): boolean => {
-  if (!supabaseUrl || !supabaseAnonKey) return false;
-  const url = supabaseUrl.trim().toLowerCase();
-  const key = supabaseAnonKey.trim();
+  const { url, key } = getActiveSupabaseConfig();
   if (!url || !key) return false;
-  if (url.includes('placeholder') || url.includes('your_supabase') || key.includes('placeholder')) return false;
-  return url.startsWith('http://') || url.startsWith('https://');
+  const lowerUrl = url.toLowerCase();
+  if (lowerUrl.includes('placeholder') || lowerUrl.includes('your_supabase') || key.includes('placeholder')) return false;
+  return lowerUrl.startsWith('http://') || lowerUrl.startsWith('https://');
 };
 
 export const getSupabaseClient = (): SupabaseClient | null => {
   if (!isSupabaseConfigured()) {
     return null;
   }
-  if (!supabaseInstance) {
-    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
+  const { url, key } = getActiveSupabaseConfig();
+  if (!supabaseInstance || cachedUrl !== url || cachedKey !== key) {
+    cachedUrl = url;
+    cachedKey = key;
+    supabaseInstance = createClient(url, key, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,

@@ -322,6 +322,27 @@ export const VaultSettingsDrawer: React.FC<VaultSettingsDrawerProps> = ({
         console.error('Failed to parse ai settings for export', e);
       }
 
+      let geminiCustomKeys = null;
+      try {
+        const savedKeys = localStorage.getItem('noesis_gemini_custom_keys');
+        if (savedKeys) {
+          geminiCustomKeys = JSON.parse(savedKeys);
+        }
+      } catch (e) {
+        console.error('Failed to parse gemini custom keys for export', e);
+      }
+
+      let supabaseConfig = null;
+      try {
+        const url = localStorage.getItem('noesis_supabase_url');
+        const key = localStorage.getItem('noesis_supabase_anon_key');
+        if (url || key) {
+          supabaseConfig = { url, key };
+        }
+      } catch (e) {
+        console.error('Failed to read supabase config for export', e);
+      }
+
       const exportData = {
         app: 'Noesis Vault',
         version: 2,
@@ -338,7 +359,9 @@ export const VaultSettingsDrawer: React.FC<VaultSettingsDrawerProps> = ({
           patternEmbeddings
         },
         chatThreads,
-        aiSettings
+        aiSettings,
+        geminiCustomKeys,
+        supabaseConfig
       };
 
       const jsonString = JSON.stringify(exportData, null, 2);
@@ -450,6 +473,29 @@ export const VaultSettingsDrawer: React.FC<VaultSettingsDrawerProps> = ({
           localStorage.setItem('noesis_v2_ai_settings', JSON.stringify(imported.aiSettings));
         } catch (e) {
           console.error('Failed to restore AI settings', e);
+        }
+      }
+
+      // Restore Gemini Custom Keys if present
+      if (imported.geminiCustomKeys && typeof imported.geminiCustomKeys === 'object') {
+        try {
+          localStorage.setItem('noesis_gemini_custom_keys', JSON.stringify(imported.geminiCustomKeys));
+        } catch (e) {
+          console.error('Failed to restore Gemini custom keys', e);
+        }
+      }
+
+      // Restore Supabase Config if present
+      if (imported.supabaseConfig && typeof imported.supabaseConfig === 'object') {
+        try {
+          if (imported.supabaseConfig.url) {
+            localStorage.setItem('noesis_supabase_url', imported.supabaseConfig.url);
+          }
+          if (imported.supabaseConfig.key) {
+            localStorage.setItem('noesis_supabase_anon_key', imported.supabaseConfig.key);
+          }
+        } catch (e) {
+          console.error('Failed to restore Supabase configuration', e);
         }
       }
 

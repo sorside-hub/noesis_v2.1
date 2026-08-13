@@ -1,3 +1,5 @@
+import { apiFetch } from '../../../shared/utils/apiClient';
+
 export interface AutoCorrectRequest {
   content: string;
   customGroqApiKey?: string;
@@ -9,7 +11,7 @@ export interface AutoCorrectResult {
 }
 
 export async function autoCorrectContent(params: AutoCorrectRequest): Promise<AutoCorrectResult> {
-  const response = await fetch('/api/auto-correct', {
+  const response = await apiFetch('/api/auto-correct', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -42,7 +42,7 @@ export const AutoDetectPreviewModal: React.FC<AutoDetectPreviewModalProps> = ({
         {/* Header */}
         <div className="px-4 py-3.5 sm:px-5 sm:py-4 border-b border-[#2A2A2A] bg-[#1F1F1F]/80 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-[#8B5CF6]/15 border border-[#8B5CF6]/30 rounded-xl text-[#A855F7]">
+            <div className="p-2 bg-[#242424] border border-[#303030] rounded-xl text-[#E5E5E5]">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
@@ -50,9 +50,6 @@ export const AutoDetectPreviewModal: React.FC<AutoDetectPreviewModalProps> = ({
                 <h3 className="text-sm font-bold text-[#E5E5E5] flex items-center gap-1.5">
                   ✨ Noesis Analysis
                 </h3>
-                <span className="text-[10px] font-semibold text-[#C084FC] bg-[#8B5CF6]/20 px-2 py-0.5 rounded-full border border-[#8B5CF6]/40">
-                  AI Librarian
-                </span>
               </div>
               <p className="text-[11px] text-[#8E8E93] mt-0.5">
                 Preview hasil deteksi metadata otomatis untuk catatanmu
@@ -193,7 +190,7 @@ export const AutoDetectPreviewModal: React.FC<AutoDetectPreviewModalProps> = ({
               onApply(result);
               onClose();
             }}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-[#8B5CF6] hover:bg-[#7C3AED] text-white shadow-lg shadow-[#8B5CF6]/20 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-[#E5E5E5] hover:bg-white text-[#111111] shadow-md transition-all cursor-pointer"
           >
             <Check className="w-4 h-4" />
             <span>Apply</span>

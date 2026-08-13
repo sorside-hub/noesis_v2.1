@@ -1,4 +1,5 @@
 import { Theme, ThemeCluster } from '../types/theme';
+import { apiFetch } from '../../../shared/utils/apiClient';
 import { NoteItem } from '../../vault/pages/VaultPage';
 import {
   getAllEmbeddings,
@@ -77,7 +78,7 @@ export class ThemeService {
     let aiGeneratedThemes: any[] = [];
 
     try {
-      const response = await fetch('/api/themes', {
+      const response = await apiFetch('/api/themes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

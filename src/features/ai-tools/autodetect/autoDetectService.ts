@@ -1,4 +1,5 @@
 import { CategoryId } from '../../vault/pages/VaultPage';
+import { apiFetch } from '../../../shared/utils/apiClient';
 
 export interface AutoDetectRequest {
   content: string;
@@ -18,7 +19,7 @@ export interface AutoDetectResult {
 
 export async function autoDetectMetadata(params: AutoDetectRequest): Promise<AutoDetectResult> {
   try {
-    const response = await fetch('/api/auto-detect', {
+    const response = await apiFetch('/api/auto-detect', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

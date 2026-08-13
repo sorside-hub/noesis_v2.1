@@ -4,7 +4,7 @@ export type VaultViewState = 'list' | 'category' | 'tag' | 'trash' | 'detail' | 
 
 export type InsightViewState = 'home' | 'pattern' | 'patternDetail' | 'themes' | 'connections' | 'connectionDetail' | 'timeline' | 'reflection';
 
-export type DrawerType = 'chatHistory' | 'chatSettings' | 'vaultSettings' | 'noteProperty' | 'distilModal';
+export type DrawerType = 'chatHistory' | 'chatSettings' | 'vaultSettings' | 'noteProperty' | 'distilModal' | 'geminiConfig' | 'supabaseConfig';
 
 export interface NavLocation {
   tab: TabType;

@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
+import { apiFetch } from '../../../shared/utils/apiClient';
 import { getDistillation, saveDistillation } from './distillService';
 import { DistillationRecord } from '../../../core/database/indexedDb';
 
@@ -64,7 +65,7 @@ export const useDistill = () => {
     abortControllerRef.current = new AbortController();
 
     try {
-      const response = await fetch('/api/distil', {
+      const response = await apiFetch('/api/distil', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

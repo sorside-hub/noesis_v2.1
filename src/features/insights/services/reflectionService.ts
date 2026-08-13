@@ -1,4 +1,5 @@
 import { Reflection } from '../types/reflection';
+import { apiFetch } from '../../../shared/utils/apiClient';
 import { NoteItem } from '../../vault/pages/VaultPage';
 import { Theme } from '../types/theme';
 import { Connection } from '../types/connection';
@@ -40,7 +41,7 @@ export class ReflectionService {
     const now = Date.now();
 
     try {
-      const response = await fetch('/api/reflections', {
+      const response = await apiFetch('/api/reflections', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

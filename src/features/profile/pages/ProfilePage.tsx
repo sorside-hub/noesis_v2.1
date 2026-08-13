@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Cpu, Zap, Info, CheckCircle2, XCircle, HelpCircle } from 'lucide-react';
+import { Cpu, Zap, Info, CheckCircle2, XCircle, HelpCircle, Settings, Database, AlertCircle } from 'lucide-react';
 import { useNavigation } from '../../../core/navigation';
 import { VaultHeader } from '../../vault/components/VaultHeader';
+import { GeminiConfigDrawer } from '../components/GeminiConfigDrawer';
+import { SupabaseConfigDrawer } from '../components/SupabaseConfigDrawer';
+
+import { apiFetch } from '../../../shared/utils/apiClient';
 
 interface AiServiceDetail {
   connected: boolean | null;
@@ -9,7 +13,9 @@ interface AiServiceDetail {
 }
 
 export const ProfilePage: React.FC = () => {
-  const { navigate } = useNavigation();
+  const { navigate, openDrawer, closeDrawer, isDrawerOpen } = useNavigation();
+  const isConfigOpen = isDrawerOpen('geminiConfig');
+  const isSupabaseOpen = isDrawerOpen('supabaseConfig');
   const [aiServices, setAiServices] = useState<{
     gemini: {
       pair1: { primary: boolean | null; backup: boolean | null };
@@ -24,10 +30,22 @@ export const ProfilePage: React.FC = () => {
     },
   });
 
+  const [supabaseStatus, setSupabaseStatus] = useState<boolean>(false);
+
+  useEffect(() => {
+    try {
+      const savedUrl = localStorage.getItem('noesis_supabase_url');
+      const savedKey = localStorage.getItem('noesis_supabase_anon_key');
+      setSupabaseStatus(Boolean(savedUrl?.trim() && savedKey?.trim()));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [isSupabaseOpen]);
+
   useEffect(() => {
     let isMounted = true;
 
-    fetch('/api/ai-status')
+    apiFetch('/api/ai-status')
       .then((res) => {
         if (!res.ok) throw new Error('HTTP error');
         return res.json();
@@ -127,13 +145,25 @@ export const ProfilePage: React.FC = () => {
           <div className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-2xl p-4 space-y-4 shadow-sm">
             {/* Gemini */}
             <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-[#242424] border border-[#303030] flex items-center justify-center text-[#E5E5E5]">
-                  <Cpu className="w-4 h-4" />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-[#242424] border border-[#303030] flex items-center justify-center text-[#E5E5E5]">
+                    <Cpu className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-[#E5E5E5]">Gemini AI Services</h3>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xs font-semibold text-[#E5E5E5]">Gemini AI Services</h3>
-                </div>
+
+                <button
+                  type="button"
+                  onClick={() => openDrawer('geminiConfig')}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#242424] hover:bg-[#2D2D2D] border border-[#333333] hover:border-[#444444] text-[#CCCCCC] hover:text-white text-xs font-medium transition-all active:scale-95 cursor-pointer shadow-xs"
+                  title="Konfigurasi API Key Gemini"
+                >
+                  <Settings className="w-3.5 h-3.5 text-[#A3A3A3]" />
+                  <span>Pengaturan</span>
+                </button>
               </div>
 
               <div className="space-y-4 pl-9">
@@ -159,6 +189,56 @@ export const ProfilePage: React.FC = () => {
                     <span className="text-[#A3A3A3]">Backup Key:</span>
                     {renderStatusBadge(aiServices.gemini.pair2.backup)}
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Supabase Database Section */}
+        <section className="space-y-2.5">
+          <h2 className="text-xs font-semibold text-[#A3A3A3] uppercase tracking-wider flex items-center gap-1.5 px-1">
+            <Database className="w-3.5 h-3.5 text-[#A3A3A3]" />
+            Status Database & Cloud Sync
+          </h2>
+
+          <div className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-2xl p-4 space-y-4 shadow-sm">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-[#242424] border border-[#303030] flex items-center justify-center text-[#E5E5E5]">
+                    <Database className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-[#E5E5E5]">Supabase Cloud</h3>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => openDrawer('supabaseConfig')}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#242424] hover:bg-[#2D2D2D] border border-[#333333] hover:border-[#444444] text-[#CCCCCC] hover:text-white text-xs font-medium transition-all active:scale-95 cursor-pointer shadow-xs"
+                  title="Konfigurasi Supabase"
+                >
+                  <Settings className="w-3.5 h-3.5 text-[#A3A3A3]" />
+                  <span>Pengaturan</span>
+                </button>
+              </div>
+
+              <div className="pl-9 space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[#A3A3A3] text-[11px]">Status Koneksi:</span>
+                  {supabaseStatus ? (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#10B981]/15 text-[#34D399] border border-[#10B981]/30">
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                      Connected
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#EF4444]/15 text-[#F87171] border border-[#EF4444]/30">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      Not Connected
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -193,6 +273,18 @@ export const ProfilePage: React.FC = () => {
         </section>
       </div>
     </div>
+
+    {/* Gemini Config Drawer */}
+    <GeminiConfigDrawer
+      isOpen={isConfigOpen}
+      onClose={() => closeDrawer('geminiConfig')}
+    />
+
+    {/* Supabase Config Drawer */}
+    <SupabaseConfigDrawer
+      isOpen={isSupabaseOpen}
+      onClose={() => closeDrawer('supabaseConfig')}
+    />
     </div>
   );
 };

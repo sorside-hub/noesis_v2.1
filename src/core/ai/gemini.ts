@@ -1,4 +1,5 @@
 import { Message, MessageModelMeta } from '../../shared/types';
+import { apiFetch } from '../../shared/utils/apiClient';
 
 /**
  * Service to communicate with Gemini API via backend proxy using streaming
@@ -15,7 +16,7 @@ export async function sendMessageStream(
       content: msg.content,
     }));
 
-    const response = await fetch('/api/chat', {
+    const response = await apiFetch('/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

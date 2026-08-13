@@ -1,3 +1,5 @@
+import { apiFetch } from '../../shared/utils/apiClient';
+
 export class EmbeddingService {
   private generateLocalFallbackVector(text: string): number[] {
     const dim = 768;
@@ -17,7 +19,7 @@ export class EmbeddingService {
   async getEmbedding(text: string): Promise<number[]> {
     if (!text || !text.trim()) return [];
     try {
-      const response = await fetch('/api/embed', {
+      const response = await apiFetch('/api/embed', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +44,7 @@ export class EmbeddingService {
   async getBatchEmbeddings(texts: string[]): Promise<number[][]> {
     if (!texts || !texts.length) return [];
     try {
-      const response = await fetch('/api/embed', {
+      const response = await apiFetch('/api/embed', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

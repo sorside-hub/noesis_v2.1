@@ -1,4 +1,5 @@
 import { Connection, ConnectionCandidate } from '../types/connection';
+import { apiFetch } from '../../../shared/utils/apiClient';
 import { Theme } from '../types/theme';
 import { NoteItem } from '../../vault/pages/VaultPage';
 import {
@@ -72,7 +73,7 @@ export class ConnectionService {
     let aiConnections: any[] = [];
 
     try {
-      const response = await fetch('/api/connections', {
+      const response = await apiFetch('/api/connections', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

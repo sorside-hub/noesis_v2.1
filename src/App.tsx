@@ -33,6 +33,8 @@ function AppContent() {
   const isSettingsOpen = isDrawerOpen('chatSettings');
   const isVaultSettingsOpen = isDrawerOpen('vaultSettings');
   const isNotePropertyOpen = isDrawerOpen('noteProperty');
+  const isGeminiConfigOpen = isDrawerOpen('geminiConfig');
+  const isSupabaseConfigOpen = isDrawerOpen('supabaseConfig');
 
   const [pendingNoteFromAI, setPendingNoteFromAI] = useState<{ title: string; content: string } | null>(null);
 
@@ -160,12 +162,14 @@ function AppContent() {
         return;
       }
 
-      // 2. If right drawer (Chat Settings / Vault Settings / Note Property) is open
-      if (isSettingsOpen || isVaultSettingsOpen || isNotePropertyOpen) {
+      // 2. If right drawer (Chat Settings / Vault Settings / Note Property / Gemini Config / Supabase Config) is open
+      if (isSettingsOpen || isVaultSettingsOpen || isNotePropertyOpen || isGeminiConfigOpen || isSupabaseConfigOpen) {
         if (deltaX > 50) {
           if (isSettingsOpen) closeDrawer('chatSettings');
           if (isVaultSettingsOpen) closeDrawer('vaultSettings');
           if (isNotePropertyOpen) closeDrawer('noteProperty');
+          if (isGeminiConfigOpen) closeDrawer('geminiConfig');
+          if (isSupabaseConfigOpen) closeDrawer('supabaseConfig');
         }
         return;
       }
@@ -210,6 +214,8 @@ function AppContent() {
     isSettingsOpen,
     isVaultSettingsOpen,
     isNotePropertyOpen,
+    isGeminiConfigOpen,
+    isSupabaseConfigOpen,
     openDrawer,
     closeDrawer,
     currentLocation.vaultViewState,

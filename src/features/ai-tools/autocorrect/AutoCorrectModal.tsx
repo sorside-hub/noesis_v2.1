@@ -42,15 +42,12 @@ export const AutoCorrectModal: React.FC<AutoCorrectModalProps> = ({
         {/* Modal Header */}
         <div className="px-4 py-3.5 sm:px-5 sm:py-4 border-b border-[#2A2A2A] bg-[#1F1F1F]/80 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-[#8B5CF6]/15 border border-[#8B5CF6]/30 rounded-xl text-[#A855F7]">
+            <div className="p-2 bg-[#242424] border border-[#303030] rounded-xl text-[#E5E5E5]">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-bold text-[#E5E5E5]">Auto Correct Preview</h3>
-                <span className="text-[10px] font-semibold text-[#C084FC] bg-[#8B5CF6]/20 px-2 py-0.5 rounded-full border border-[#8B5CF6]/40">
-                  Groq AI
-                </span>
               </div>
               <p className="text-[11px] text-[#8E8E93] mt-0.5">
                 Lihat hasil perbaikan ejaan dan tata bahasa tulisanmu.
@@ -75,7 +72,7 @@ export const AutoCorrectModal: React.FC<AutoCorrectModalProps> = ({
               onClick={() => setActiveTab('corrected')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'corrected'
-                  ? 'bg-[#8B5CF6] text-white shadow-sm'
+                  ? 'bg-[#E5E5E5] text-[#111111] shadow-sm'
                   : 'text-[#8E8E93] hover:text-[#D4D4D4]'
               }`}
             >
@@ -99,13 +96,13 @@ export const AutoCorrectModal: React.FC<AutoCorrectModalProps> = ({
           <button
             type="button"
             onClick={handleCopyCurrent}
-            className="flex items-center gap-1 px-2.5 py-1.5 text-[11px] text-[#8E8E93] hover:text-[#C084FC] bg-[#1E1E1E] hover:bg-[#282828] border border-[#2A2A2A] rounded-lg transition-all cursor-pointer shrink-0"
+            className="flex items-center gap-1 px-2.5 py-1.5 text-[11px] text-[#8E8E93] hover:text-[#E5E5E5] bg-[#1E1E1E] hover:bg-[#282828] border border-[#2A2A2A] rounded-lg transition-all cursor-pointer shrink-0"
             title="Salin teks tab saat ini"
           >
             {copied ? (
               <>
-                <CheckCheck className="w-3.5 h-3.5 text-[#C084FC]" />
-                <span className="text-[#C084FC] font-medium">Tersalin</span>
+                <CheckCheck className="w-3.5 h-3.5 text-[#34D399]" />
+                <span className="text-[#34D399] font-medium">Tersalin</span>
               </>
             ) : (
               <>
@@ -145,7 +142,7 @@ export const AutoCorrectModal: React.FC<AutoCorrectModalProps> = ({
             <button
               type="button"
               onClick={handleApplyClick}
-              className="px-5 py-2 bg-[#8B5CF6] hover:bg-[#7C3AED] active:scale-95 text-white font-semibold text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-lg shadow-[#8B5CF6]/25 min-w-[90px]"
+              className="px-5 py-2 bg-[#E5E5E5] hover:bg-white active:scale-95 text-[#111111] font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md min-w-[90px]"
             >
               <Check className="w-4 h-4" />
               <span>Apply</span>

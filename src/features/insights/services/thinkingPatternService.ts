@@ -3,6 +3,7 @@ import {
   ThinkingPatternHistoryRecord,
   ThinkingPatternMetaRecord,
 } from '../types/thinkingPattern';
+import { apiFetch } from '../../../shared/utils/apiClient';
 import {
   initNoesisDB,
   THINKING_PATTERNS_STORE_NAME,
@@ -1038,7 +1039,7 @@ export const generateThinkingPatterns = async (
   // Prepare organic knowledge context payload with adaptive context selection & compression
   const organicContext = await prepareOrganicKnowledgeContext(notes);
 
-  const response = await fetch('/api/thinking-pattern', {
+  const response = await apiFetch('/api/thinking-pattern', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

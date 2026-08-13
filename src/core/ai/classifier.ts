@@ -1,3 +1,5 @@
+import { apiFetch } from '../../shared/utils/apiClient';
+
 export interface ClassificationResult {
   needRAG: boolean;
   intent: string;
@@ -25,7 +27,7 @@ export class GroqClassifierService {
     }
 
     try {
-      const response = await fetch('/api/classify', {
+      const response = await apiFetch('/api/classify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
