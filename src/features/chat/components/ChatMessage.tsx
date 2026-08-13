@@ -232,7 +232,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                 : 'border-[#363636]'
             } text-[#E5E5E5] rounded-2xl rounded-tr-xs px-4 py-2.5 shadow-sm`}
           >
-            <div className="whitespace-pre-wrap break-words">
+            <div className="whitespace-pre-wrap break-words select-text">
               {message.content}
             </div>
           </div>
