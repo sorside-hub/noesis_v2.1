@@ -4,6 +4,7 @@ import { useNavigation } from '../../../core/navigation';
 import { VaultHeader } from '../../vault/components/VaultHeader';
 import { GeminiConfigDrawer } from '../components/GeminiConfigDrawer';
 import { SupabaseConfigDrawer } from '../components/SupabaseConfigDrawer';
+import { isSupabaseConfigured } from '../../../core/database/supabaseClient';
 
 import { apiFetch } from '../../../shared/utils/apiClient';
 
@@ -34,9 +35,7 @@ export const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     try {
-      const savedUrl = localStorage.getItem('noesis_supabase_url');
-      const savedKey = localStorage.getItem('noesis_supabase_anon_key');
-      setSupabaseStatus(Boolean(savedUrl?.trim() && savedKey?.trim()));
+      setSupabaseStatus(isSupabaseConfigured());
     } catch (e) {
       console.error(e);
     }
