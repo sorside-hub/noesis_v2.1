@@ -231,7 +231,7 @@ export const NoteDetailPage: React.FC<NoteDetailPageProps> = ({
 
         {/* Note Metadata & Title */}
         <div className="mb-4 pb-3 border-b border-[#2A2A2A]">
-          <h1 className="text-xl font-bold text-[#E5E5E5] mb-2 leading-tight">
+          <h1 className="text-xl font-bold text-[#E5E5E5] mb-2 leading-tight select-text">
             {title.trim() || 'Catatan Tanpa Judul'}
           </h1>
 
