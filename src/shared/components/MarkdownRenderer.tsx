@@ -44,7 +44,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   }, [content]);
 
   return (
-    <div className="markdown-content text-sm text-[#E5E5E5] leading-relaxed break-words">
+    <div className="markdown-content text-sm text-[#E5E5E5] leading-relaxed break-words select-text">
       <ReactMarkdown
         urlTransform={(url) => url}
         remarkPlugins={[remarkGfm, remarkBreaks]}
