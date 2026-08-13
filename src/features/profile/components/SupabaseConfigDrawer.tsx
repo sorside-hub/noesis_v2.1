@@ -13,6 +13,7 @@ import {
   Lock
 } from 'lucide-react';
 import { syncEngine } from '../../../core/sync/syncEngine';
+import { isSupabaseConfigured } from '../../../core/database/supabaseClient';
 
 interface SupabaseConfigDrawerProps {
   isOpen: boolean;
@@ -34,7 +35,7 @@ export const SupabaseConfigDrawer: React.FC<SupabaseConfigDrawerProps> = ({ isOp
         const savedKey = localStorage.getItem('noesis_supabase_anon_key') || '';
         setSupabaseUrl(savedUrl);
         setSupabaseAnonKey(savedKey);
-        setIsConnected(Boolean(savedUrl.trim() && savedKey.trim()));
+        setIsConnected(isSupabaseConfigured());
       } catch (e) {
         console.error('Error reading Supabase keys:', e);
       }
@@ -49,7 +50,7 @@ export const SupabaseConfigDrawer: React.FC<SupabaseConfigDrawerProps> = ({ isOp
       const key = supabaseAnonKey.trim();
       localStorage.setItem('noesis_supabase_url', url);
       localStorage.setItem('noesis_supabase_anon_key', key);
-      setIsConnected(Boolean(url && key));
+      setIsConnected(isSupabaseConfigured());
 
       if (url && key) {
         // Trigger initial sync in the background
@@ -78,7 +79,7 @@ export const SupabaseConfigDrawer: React.FC<SupabaseConfigDrawerProps> = ({ isOp
     try {
       localStorage.removeItem('noesis_supabase_url');
       localStorage.removeItem('noesis_supabase_anon_key');
-      setIsConnected(false);
+      setIsConnected(isSupabaseConfigured());
     } catch (e) {
       console.error('Failed to reset Supabase config:', e);
     }
